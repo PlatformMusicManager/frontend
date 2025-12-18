@@ -1,0 +1,126 @@
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--color-text-base);
+}
+
+/* Grid */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background-color: var(--color-bg-card);
+    border-radius: 6px;
+    padding: 16px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    position: relative;
+    color: var(--color-text-base);
+}
+
+.card:hover {
+    background-color: var(--color-bg-card-hover);
+}
+
+.card-image-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: #333;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.card-image-placeholder span {
+    font-size: 48px;
+}
+
+.card-content h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-content p {
+    color: var(--color-text-subdued);
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.play-btn {
+    position: absolute;
+    right: 24px;
+    bottom: 88px;
+    /* Adjust based on content height */
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border-radius: 50%;
+    background-color: var(--color-brand-primary);
+    border: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover .play-btn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.play-btn:hover {
+    transform: scale(1.05);
+    background-color: var(--color-brand-hover);
+}
+
+.empty-state {
+    color: var(--color-text-subdued);
+    font-style: italic;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--color-header-bg);
+    border: none;
+    color: var(--color-text-base);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.card:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    background-color: var(--color-danger);
+    transform: scale(1.1);
+}

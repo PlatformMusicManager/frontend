@@ -1,0 +1,27 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Verify Account</h2>
+
+        <div *ngIf="status() === 'verifying'" class="status-message">
+            <div class="spinner"></div>
+            <p>{{ message() }}</p>
+        </div>
+
+        <div *ngIf="status() === 'success'" class="status-message success">
+            <p>✅ {{ message() }}</p>
+        </div>
+
+        <div *ngIf="status() === 'error' || status() === 'idle'">
+            <p class="auth-subtitle">{{ message() }}</p>
+
+            <form [formGroup]="verifyForm" (ngSubmit)="onSubmit()" class="auth-form">
+                <div class="form-group">
+                    <label for="code">Verification Code</label>
+                    <input type="text" id="code" formControlName="code" placeholder="123456" class="form-input">
+                </div>
+
+                <button type="submit" [disabled]="verifyForm.invalid" class="submit-btn">Verify</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="main-container">
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Music App</h2>
+        </div>
+        <nav>
+            <ul>
+                <li routerLink="/library" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><span
+                        class="icon">🏠</span> Main</li>
+                <li><span class="icon">🔍</span> Search</li>
+                <li><span class="icon">📚</span> Your Library</li>
+            </ul>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <div class="playlists-nav">
+            <button class="create-playlist" (click)="openCreatePlaylistModal()"><span class="icon">+</span> Create
+                Playlist</button>
+            <button class="liked-songs"><span class="icon">♥</span> Liked Songs</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <header>
+            <div class="search-bar">
+                <span class="icon">🔍</span>
+                <input type="text" placeholder="Search for artists, songs, or podcasts"
+                    (keyup.enter)="onSearch($event)">
+            </div>
+            <div class="header-right">
+                <app-platform-selector></app-platform-selector>
+                <div class="user-menu" *ngIf="user" (click)="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <span>{{ userInitial }}</span>
+                    </div>
+                    <div class="dropdown-menu" *ngIf="showUserMenu">
+                        <button class="menu-item">Account</button>
+                        <button class="menu-item" (click)="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="scrollable-content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+<app-create-playlist-modal *ngIf="showCreatePlaylistModal" (create)="onPlaylistCreated($event)"
+    (cancel)="closeCreatePlaylistModal()">
+</app-create-playlist-modal>

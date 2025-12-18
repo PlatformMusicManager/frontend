@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+/* CSS Reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* Global Styles */
+:root {
+    --color-bg-base: #000;
+    --color-bg-card: #181818;
+    --color-bg-card-hover: #282828;
+    --color-bg-elevated: #282828;
+    --color-bg-content-gradient: linear-gradient(180deg, #202020 0%, #121212 400px);
+
+    --color-text-base: #fff;
+    --color-text-subdued: #b3b3b3;
+
+    --color-brand-primary: #1db954;
+    --color-brand-hover: #1ed760;
+
+    --color-danger: #e91429;
+    --color-overlay: rgba(0, 0, 0, 0.7);
+    --color-header-bg: rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-base);
+    font-family: 'Circular', 'Canva Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}

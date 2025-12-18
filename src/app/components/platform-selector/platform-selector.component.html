@@ -1,0 +1,9 @@
+<div class="platform-selector" [class.mode-soundcloud]="(currentPlatform$ | async) === 'SOUNDCLOUD'">
+    <div class="sliding-pill"></div>
+    <button (click)="setPlatform('DEEZER')" [class.active]="(currentPlatform$ | async) === 'DEEZER'">
+        Deezer
+    </button>
+    <button (click)="setPlatform('SOUNDCLOUD')" [class.active]="(currentPlatform$ | async) === 'SOUNDCLOUD'">
+        SoundCloud
+    </button>
+</div>
