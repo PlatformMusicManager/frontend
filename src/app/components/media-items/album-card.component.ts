@@ -2,17 +2,17 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-search-card',
+    selector: 'app-album-card',
     standalone: true,
     imports: [CommonModule],
     template: `
         <div class="card">
-            <div class="card-image" [class.circle]="type === 'Artist'">
-                <img [src]="image || defaultImage" [alt]="type">
+            <div class="card-image">
+                <img [src]="image || 'default-album.png'" alt="Album">
             </div>
             <div class="card-content">
                 <h4>{{ title }}</h4>
-                <p>{{ subtitle }}</p>
+                <p>{{ artist }}</p>
             </div>
         </div>
     `,
@@ -37,9 +37,6 @@ import { CommonModule } from '@angular/common';
             border-radius: 4px;
             overflow: hidden;
         }
-        .card-image.circle {
-            border-radius: 50%;
-        }
         .card-image img {
             width: 100%;
             height: 100%;
@@ -63,13 +60,8 @@ import { CommonModule } from '@angular/common';
         }
     `]
 })
-export class SearchCardComponent {
+export class AlbumCardComponent {
     @Input({ required: true }) title!: string;
-    @Input() subtitle: string = '';
+    @Input() artist: string = '';
     @Input() image?: string;
-    @Input() type: 'Artist' | 'Playlist' | 'Album' = 'Playlist';
-
-    get defaultImage(): string {
-        return this.type === 'Artist' ? 'assets/default-user.png' : 'assets/default-playlist.png';
-    }
 }

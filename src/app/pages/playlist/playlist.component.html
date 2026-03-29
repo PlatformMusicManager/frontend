@@ -1,0 +1,49 @@
+<div class="playlist-page" *ngIf="playlist()">
+    <div class="playlist-header">
+        <div class="header-image shadow">
+            <img [src]="playlist()?.picture || 'default-playlist.png'" alt="Playlist Art">
+        </div>
+        <div class="header-info">
+            <span class="type">Playlist</span>
+            <h1 class="title">{{ playlist()?.title }}</h1>
+            <div class="meta">
+                <span class="owner">By {{ playlist()?.parent_username }}</span>
+                <span class="bullet">•</span>
+                <span class="platform">{{ playlist()?.platform }}</span>
+                <span class="bullet">•</span>
+                <span class="count">{{ playlist()?.size || playlist()?.tracks?.length }} songs</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="playlist-controls">
+        <button class="play-button" (click)="playPlaylist()">
+            <svg role="img" height="28" width="28" aria-hidden="true" viewBox="0 0 24 24" data-encore-id="icon"
+                class="Svg-sc-ytk21e-0 haNxPq">
+                <path
+                    d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z">
+                </path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="track-list">
+        <div class="track-header-row">
+            <span class="col-num">#</span>
+            <span class="col-title">Title</span>
+            <span class="col-time">
+                <svg role="img" height="16" width="16" aria-hidden="true" viewBox="0 0 16 16" data-encore-id="icon"
+                    class="Svg-sc-ytk21e-0 haNxPq">
+                    <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"></path>
+                    <path d="M8 3.25a.75.75 0 0 1 .75.75v3.25H11a.75.75 0 0 1 0 1.5H7.25V4A.75.75 0 0 1 8 3.25z"></path>
+                </svg>
+            </span>
+        </div>
+        <div class="tracks">
+            <app-track-item *ngFor="let track of playlist()?.tracks; let i = index" [track]="track">
+            </app-track-item>
+        </div>
+    </div>
+</div>
+<div *ngIf="loading()" class="loading-state">Loading...</div>
+<div *ngIf="error()" class="error-state">{{ error() }}</div>

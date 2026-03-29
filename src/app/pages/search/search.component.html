@@ -5,26 +5,28 @@
         <section *ngIf="searchResults.tracks && searchResults.tracks.length > 0" class="results-section">
             <h3>Songs</h3>
             <div class="track-list">
-                <app-search-track *ngFor="let track of searchResults.tracks" [track]="track">
-                </app-search-track>
+                <app-track-item *ngFor="let track of searchResults.tracks; let i = index" [track]="track"
+                    (playRequest)="playTrack(i)">
+                </app-track-item>
             </div>
         </section>
 
         <section *ngIf="searchResults.playlists && searchResults.playlists.length > 0" class="results-section">
             <h3>Playlists</h3>
             <div class="grid-container">
-                <app-search-card *ngFor="let playlist of searchResults.playlists" [title]="playlist.title"
-                    [subtitle]="'By ' + playlist.parent_username" [image]="playlist.picture" type="Playlist">
-                </app-search-card>
+                <app-playlist-card *ngFor="let playlist of searchResults.playlists" [title]="playlist.title"
+                    [subtitle]="'By ' + playlist.parent_username" [image]="playlist.picture" [id]="playlist.id"
+                    [platform]="playlist.platform">
+                </app-playlist-card>
             </div>
         </section>
 
         <section *ngIf="searchResults.artists && searchResults.artists.length > 0" class="results-section">
             <h3>Artists</h3>
             <div class="grid-container">
-                <app-search-card *ngFor="let artist of searchResults.artists" [title]="artist.username"
-                    subtitle="Artist" [image]="artist.picture" type="Artist">
-                </app-search-card>
+                <app-artist-card *ngFor="let artist of searchResults.artists" [name]="artist.username"
+                    [image]="artist.picture" [id]="artist.id" [platform]="currentPlatform!">
+                </app-artist-card>
             </div>
         </section>
 

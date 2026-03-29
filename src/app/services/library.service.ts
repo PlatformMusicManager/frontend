@@ -16,6 +16,7 @@ export interface ApiTrack {
     duration: number;
     track_url?: string;
     track_token?: string;
+    platform: Platform;
     picture?: string;
     artists: ApiArtist[];
     active?: boolean; // For UI state
@@ -26,6 +27,7 @@ export interface ApiPlaylist {
     title: string;
     parent_username: string;
     picture?: string;
+    platform: Platform;
     tracks: ApiTrack[];
     size: number;
 }
@@ -110,10 +112,40 @@ export class LibraryService {
     }
 
     search(query: string, platform: Platform): Observable<ApiSearchPage> {
-        const servicePath = platform.toLowerCase(); // 'deezer' or 'soundcloud'
-        return this.http.get<ApiSearchPage>(`/api/${servicePath}/search`, {
+        return this.http.get<ApiSearchPage>(`/api/${platform}/search`, {
             params: { query, offset: '0', limit: '10' },
             withCredentials: true
         });
     }
+
+    getPlaylist(id: string, platform: Platform, save: boolean = false): Observable<ApiPlaylist> {
+        return this.http.get<ApiPlaylist>(`/api/${platform}/playlist/${id}`, {
+            params: { save: save.toString() },
+            withCredentials: true
+        });
+    }
+
+    getArtistDetails(id: string, platform: Platform): Observable<ArtistDetails> {
+        return this.http.get<ArtistDetails>(`/api/${platform}/user/${id}/details`, {
+            withCredentials: true
+        });
+    }
+
+    getArtist(id: string, platform: Platform): Observable<ApiArtist> {
+        return this.http.get<ApiArtist>(`/api/${platform}/user/${id}`, {
+            withCredentials: true
+        });
+    }
+
+    getArtistTracks(id: string, platform: Platform): Observable<ApiTrack[]> {
+        return this.http.get<ApiTrack[]>(`/api/${platform}/user/${id}/tracks`, {
+            withCredentials: true
+        });
+    }
+}
+
+export interface ArtistDetails {
+    artist: ApiArtist;
+    tracks: ApiTrack[];
+    playlists: ApiPlaylist[];
 }

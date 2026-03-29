@@ -1,0 +1,139 @@
+:host {
+    display: block;
+    height: 100%;
+    overflow-y: auto;
+    /* Ensure content is scrollable */
+}
+
+.artist-page {
+    /* Create a nice gradient background resembling a high-end music player */
+    background: linear-gradient(to bottom, #535353 0%, #121212 400px);
+    padding: 32px;
+    padding-top: 80px;
+    /* More space at top */
+    min-height: 100%;
+}
+
+/* Header Section */
+.artist-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: 40px;
+}
+
+.cover-image {
+    width: 232px;
+    height: 232px;
+    object-fit: cover;
+    border-radius: 50%;
+    /* Circular for artists */
+    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+    background-color: #282828;
+    /* Placeholder color before load */
+}
+
+.artist-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.type {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+}
+
+.name {
+    font-size: 5rem;
+    /* Large, impressive font size */
+    font-weight: 900;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+}
+
+/* Actions Section (Play Button) */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.play-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--color-brand-primary);
+    color: #000;
+    /* Icon color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.play-button:hover {
+    transform: scale(1.04);
+    background-color: var(--color-brand-hover);
+}
+
+.play-button .icon {
+    font-size: 24px;
+    margin-left: 4px;
+    /* Optical center */
+}
+
+/* Sections */
+.tracks-section,
+.playlists-section {
+    margin-top: 40px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--color-text-base);
+}
+
+.tracks-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+    /* Subtle separation */
+    margin: 0 -32px;
+    /* Pull out to edges */
+    padding: 24px 32px;
+}
+
+/* Playlists Grid */
+.playlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+}
+
+/* Loading/Error States */
+.loading-container,
+.error-container,
+.no-tracks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: var(--color-text-subdued);
+}
+
+/* Track List - ensure track items handle their own width */
+.track-list {
+    display: flex;
+    flex-direction: column;
+}

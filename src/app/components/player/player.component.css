@@ -1,0 +1,409 @@
+.player-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background-color: #181818;
+    border-top: 1px solid #282828;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.track-info {
+    display: flex;
+    align-items: center;
+    width: 30%;
+    min-width: 180px;
+}
+
+.track-art {
+    width: 56px;
+    height: 56px;
+    background-color: #282828;
+    margin-right: 14px;
+    border-radius: 4px;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.track-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.track-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.track-artist {
+    color: #b3b3b3;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.player-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    max-width: 722px;
+}
+
+.control-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    color: #fff;
+}
+
+.play-pause-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #000;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s;
+}
+
+.small-btn {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.small-btn.active {
+    opacity: 1;
+    color: #1ed760;
+    position: relative;
+}
+
+.small-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: #1ed760;
+    border-radius: 50%;
+}
+
+
+.play-pause-btn:hover {
+    transform: scale(1.05);
+    color: #000;
+}
+
+.playback-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+    font-size: 11px;
+    color: #b3b3b3;
+}
+
+.progress-container {
+    flex: 1;
+    height: 4px;
+    background-color: #4f4f4f;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.progress-container:hover .progress-bar {
+    background-color: #1ed760;
+    /* Spotify/Music generic green, or use platform color */
+}
+
+.volume-controls {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.icon-btn.active {
+    color: #1ed760;
+}
+
+.queue-overlay {
+    position: fixed;
+    bottom: 90px;
+    right: 0;
+    width: 400px;
+    max-width: 100vw;
+    height: calc(100vh - 180px);
+    /* Adjust based on header/footer */
+    background-color: #121212;
+    border-left: 1px solid #282828;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
+    padding-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.queue-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #282828;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #121212;
+}
+
+.queue-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.queue-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+/* Updated Queue Item Layout */
+.queue-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    height: 56px;
+    box-sizing: border-box;
+}
+
+.item-left {
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.queue-actions {
+    display: flex;
+    align-items: center;
+    min-width: 100px;
+    justify-content: flex-end;
+}
+
+.action-buttons {
+    display: none;
+    /* Hidden by default */
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.queue-item:hover .action-buttons {
+    display: flex;
+    /* Show on hover */
+}
+
+.queue-item:hover .queue-duration {
+    display: none;
+    /* Hide duration on hover to show buttons */
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.action-btn:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.delete-btn:hover {
+    color: #ff5555;
+}
+
+/* Existing styles below */
+
+.queue-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.queue-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.queue-item.active .queue-title {
+    color: #1ed760;
+}
+
+.queue-index {
+    color: #b3b3b3;
+    font-size: 14px;
+}
+
+.playing-indicator {
+    color: #1ed760;
+    font-size: 12px;
+}
+
+.queue-track-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.queue-title {
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.queue-artist {
+    color: #b3b3b3;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.queue-artist span:not(:last-child):after {
+    content: ", ";
+    white-space: pre;
+}
+
+
+.queue-duration {
+    color: #b3b3b3;
+    font-size: 13px;
+    min-width: 40px;
+    text-align: right;
+}
+
+.empty-queue {
+    padding: 40px;
+    text-align: center;
+    color: #b3b3b3;
+    font-size: 14px;
+}
+
+/* Drag and Drop Styles */
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    background-color: #282828;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    height: 56px;
+    color: #fff;
+    z-index: 1000;
+}
+
+.cdk-drag-preview .queue-title {
+    color: #fff;
+    font-size: 14px;
+}
+
+.cdk-drag-preview .queue-artist {
+    color: #b3b3b3;
+    font-size: 12px;
+}
+
+.cdk-drag-preview .queue-duration {
+    display: none;
+}
+
+.cdk-drag-preview .action-buttons {
+    display: none;
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.queue-list.cdk-drop-list-dragging .queue-item:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.queue-item-drag-placeholder {
+    /* If needed for specific placeholder styling */
+    width: 100%;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed #444;
+}

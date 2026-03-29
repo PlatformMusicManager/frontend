@@ -1,18 +1,27 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-export type Platform = 'DEEZER' | 'SOUNDCLOUD';
+export enum Platform {
+    Deezer = "deezer",
+    Soundcloud = "soundcloud"
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlatformService {
-    private platformSubject = new BehaviorSubject<Platform>('DEEZER');
+    private platformSubject = new BehaviorSubject<Platform>(Platform.Deezer);
     public platform$ = this.platformSubject.asObservable();
 
-    constructor() { }
+    constructor() {
+        const savedPlatform = localStorage.getItem('platform') as Platform;
+        if (savedPlatform && Object.values(Platform).includes(savedPlatform)) {
+            this.platformSubject.next(savedPlatform);
+        }
+    }
 
     setPlatform(platform: Platform): void {
+        localStorage.setItem('platform', platform);
         this.platformSubject.next(platform);
     }
 

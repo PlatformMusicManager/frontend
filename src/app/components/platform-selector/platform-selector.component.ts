@@ -12,6 +12,7 @@ import { PlatformService, Platform } from '../../services/platform.service';
 export class PlatformSelectorComponent {
     private platformService = inject(PlatformService);
     currentPlatform$ = this.platformService.platform$;
+    Platform = Platform;
 
     setPlatform(platform: Platform): void {
         this.platformService.setPlatform(platform);

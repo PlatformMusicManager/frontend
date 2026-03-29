@@ -17,7 +17,9 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'library', pathMatch: 'full' },
             { path: 'library', component: LibraryComponent },
-            { path: 'search', component: SearchComponent }
+            { path: 'search', component: SearchComponent },
+            { path: 'playlist/:platform/:id', loadComponent: () => import('./pages/playlist/playlist.component').then(m => m.PlaylistComponent) },
+            { path: 'artist/:platform/:id', loadComponent: () => import('./pages/artist/artist.component').then(m => m.ArtistComponent) }
         ]
     },
     { path: '', redirectTo: 'login', pathMatch: 'full' }

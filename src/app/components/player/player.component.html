@@ -1,0 +1,82 @@
+<div class="player-container" *ngIf="currentTrack()">
+    <div class="track-info">
+        <img [src]="currentArt" alt="Album Art" class="track-art" *ngIf="currentArt">
+        <div class="track-details">
+            <span class="track-title" [title]="currentTitle">{{ currentTitle }}</span>
+            <span class="track-artist" [title]="currentArtist">{{ currentArtist }}</span>
+        </div>
+    </div>
+
+    <div class="player-controls">
+        <div class="control-buttons">
+            <button class="icon-btn small-btn" [class.active]="playerService.shuffle()" (click)="toggleShuffle()"
+                title="Shuffle">🔀</button>
+            <button class="icon-btn" title="Previous" (click)="previousTrack()">⏮</button>
+            <button class="play-pause-btn" (click)="togglePlay()">
+                <ng-container *ngIf="isLoading(); else playState">
+                    <span>⌛</span>
+                </ng-container>
+                <ng-template #playState>
+                    <span *ngIf="isPlaying()">⏸</span>
+                    <span *ngIf="!isPlaying()">▶</span>
+                </ng-template>
+            </button>
+            <button class="icon-btn" title="Next" (click)="nextTrack()">⏭</button>
+            <button class="icon-btn small-btn" [class.active]="playerService.repeatMode() !== RepeatMode.OFF"
+                (click)="toggleRepeat()" title="Repeat">
+                <span *ngIf="playerService.repeatMode() === RepeatMode.ONE">🔂</span>
+                <span *ngIf="playerService.repeatMode() !== RepeatMode.ONE">🔁</span>
+            </button>
+        </div>
+
+        <div class="playback-bar">
+            <span>{{ formatTime(currentTime()) }}</span>
+            <div class="progress-container" (click)="onSeek($event)">
+                <div class="progress-bar" [style.width]="progressWidth()"></div>
+            </div>
+            <span>{{ formatTime(duration()) }}</span>
+        </div>
+    </div>
+
+    <div class="volume-controls">
+        <button class="icon-btn" [class.active]="showQueue" (click)="toggleQueue()" title="Queue">≣</button>
+    </div>
+</div>
+
+<div class="queue-overlay" *ngIf="showQueue">
+    <div class="queue-header">
+        <h3>Queue</h3>
+        <button class="close-btn" (click)="toggleQueue()">×</button>
+    </div>
+    <div class="queue-list" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div class="queue-item" *ngFor="let track of playerService.queue(); let i = index" cdkDrag
+            (cdkDragStarted)="onDragStarted()" (cdkDragEnded)="onDragEnded()"
+            [class.active]="i === playerService.currentIndex()" (click)="playQueueTrack(track, i)">
+
+            <div class="queue-item-drag-placeholder" *cdkDragPlaceholder></div>
+
+            <div class="item-left">
+                <span class="queue-index" *ngIf="i !== playerService.currentIndex()">{{ i + 1 }}</span>
+                <span class="playing-indicator" *ngIf="i === playerService.currentIndex()">▶</span>
+            </div>
+
+            <div class="queue-track-info">
+                <span class="queue-title">{{ track.title }}</span>
+                <span class="queue-artist" *ngFor="let artist of track.artists">{{ artist.username }}</span>
+            </div>
+
+            <div class="queue-actions">
+                <span class="queue-duration">{{ formatTime(track.duration / 1000) }}</span>
+
+                <div class="action-buttons">
+                    <button class="action-btn delete-btn"
+                        (click)="$event.stopPropagation(); removeFromQueue(i)">×</button>
+                    <!-- Drag handle icon (optional) or just drag whole row -->
+                </div>
+            </div>
+        </div>
+        <div class="empty-queue" *ngIf="playerService.queue().length === 0">
+            Queue is empty
+        </div>
+    </div>
+</div>

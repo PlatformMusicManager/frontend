@@ -4,12 +4,13 @@ import { RouterModule, Router } from '@angular/router';
 import { LibraryService, UserWithPlaylists } from '../../../services/library.service';
 import { CreatePlaylistModalComponent } from '../../create-playlist-modal/create-playlist-modal.component';
 import { PlatformSelectorComponent } from '../../platform-selector/platform-selector.component';
+import { PlayerComponent } from '../../player/player.component';
 import { inject, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-main-layout',
     standalone: true,
-    imports: [CommonModule, RouterModule, CreatePlaylistModalComponent, PlatformSelectorComponent],
+    imports: [CommonModule, RouterModule, CreatePlaylistModalComponent, PlatformSelectorComponent, PlayerComponent],
     templateUrl: './main-layout.component.html',
     styleUrls: ['./main-layout.component.css']
 })
