@@ -44,9 +44,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                         }),
                         catchError((refreshErr) => {
                             isRefreshing = false;
-                            // Refresh failed, logout/redirect
-                            toastService.show('Session expired. Please log in again.', 'error');
-                            router.navigate(['/login']);
+                            
+                            const isAuthPage = router.url.includes('/login') || 
+                                               router.url.includes('/register') || 
+                                               router.url.includes('/verify');
+                            
+                            if (!isAuthPage) {
+                                toastService.show('Session expired. Please log in again.', 'error');
+                                router.navigate(['/login']);
+                            }
+                            
                             return throwError(() => refreshErr);
                         }),
                         finalize(() => {
