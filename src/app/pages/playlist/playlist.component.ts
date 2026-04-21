@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PlayerService } from '../../services/player.service';
 import { PlatformService, Platform, ApiPlaylist } from '../../services/platform.service';
-import { TrackItemComponent } from '../../components/media-items/track-item.component';
+import { TrackItemComponent } from '../../components/media-items/track/track-item.component';
 import { switchMap, catchError, of } from 'rxjs';
 
 @Component({

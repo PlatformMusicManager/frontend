@@ -1,0 +1,24 @@
+<div class="track-item" (click)="playTrack()">
+  <div class="track-img">
+    <img [src]="track.picture || 'default-track.png'" alt="Track Art" />
+    <div class="play-overlay">▶</div>
+  </div>
+  <div class="track-info">
+    <div class="track-title">{{ track.title }}</div>
+    <div class="track-meta">
+      @for (artist of track.artists; track $index; let last = $last) {
+        {{ artist.username }}{{ !last ? ', ' : '' }}
+      }
+    </div>
+  </div>
+  <div class="track-actions">
+    <button
+      class="add-queue-btn"
+      title="Add to Queue"
+      (click)="$event.stopPropagation(); addToQueue()"
+    >
+      +
+    </button>
+  </div>
+  <div class="track-duration">{{ formatDuration(track.duration) }}</div>
+</div>

@@ -9,7 +9,7 @@ import {
   ApiPlaylist,
   ApiTrack,
 } from '../../services/platform.service';
-import { TrackItemComponent } from '../../components/media-items/track-item.component';
+import { TrackItemComponent } from '../../components/media-items/track/track-item.component';
 import { PlaylistCardComponent } from '../../components/media-items/playlist-card.component';
 
 @Component({

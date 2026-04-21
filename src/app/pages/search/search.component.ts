@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { switchMap, combineLatest, map, filter, catchError, of } from 'rxjs';
 import { PlayerService } from '../../services/player.service';
 import { PlatformService, Platform, ApiSearchPage } from '../../services/platform.service';
-import { TrackItemComponent } from '../../components/media-items/track-item.component';
+import { TrackItemComponent } from '../../components/media-items/track/track-item.component';
 import { PlaylistCardComponent } from '../../components/media-items/playlist-card.component';
 import { ArtistCardComponent } from '../../components/media-items/artist-card.component';
 

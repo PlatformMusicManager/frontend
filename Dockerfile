@@ -1,5 +1,5 @@
-# Stage 1: Build the Angular application
-FROM node:20-alpine AS builder
+# Stage 1: Development and Build Environment
+FROM node:20-alpine AS dev
 
 WORKDIR /app
 
@@ -7,16 +7,25 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm i
 
 # Copy the rest of the application files
 COPY . .
 
-# Build the application
+# Expose port (Nginx reverse proxies http://frontend:80)
+EXPOSE 80
+
+# Start development server with file polling for docker volumes
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--port", "80"]
+
+# CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--port", "80", "--watch", "false", "--poll", "2000"]
+
+# Stage 2: Builder for production
+FROM dev AS builder
 RUN npm run build
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:alpine
+# Stage 3: Serve the application with Nginx (production)
+FROM nginx:alpine AS prod
 
 # Copy the build output to replace the default nginx contents.
 # Angular build:application builder outputs to dist/frontend/browser
