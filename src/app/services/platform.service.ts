@@ -23,7 +23,6 @@ export interface ApiTrack {
   platform: Platform;
   picture?: string;
   artists: ApiArtist[];
-  active?: boolean; // For UI state
 }
 
 export interface ApiPlaylist {
@@ -71,6 +70,12 @@ export class PlatformService {
 
   getCurrentPlatform(): Platform {
     return this.platformSubject.value;
+  }
+
+  getTrack(id: string, platform: Platform): Observable<ApiTrack> {
+    return this.http.get<ApiTrack>(`/api/${platform}/track/${id}`, {
+      withCredentials: true,
+    });
   }
 
   search(query: string, platform: Platform): Observable<ApiSearchPage> {

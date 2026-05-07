@@ -2,6 +2,10 @@ import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiTrack } from '../../../services/platform.service';
 import { PlayerService } from '../../../services/player.service';
+import {
+  TransformedTrackInPlaylist,
+  TransformedTrackInPlaylistFullData,
+} from '../../../services/library.service';
 
 @Component({
   selector: 'app-track-item',
@@ -11,7 +15,7 @@ import { PlayerService } from '../../../services/player.service';
   styleUrl: './track-item.component.css',
 })
 export class TrackItemComponent {
-  @Input({ required: true }) track!: ApiTrack;
+  @Input({ required: true }) track!: ApiTrack | TransformedTrackInPlaylistFullData;
   @Output() playRequest = new EventEmitter<void>();
   private playerService = inject(PlayerService);
 
