@@ -1,0 +1,36 @@
+<div class="playlist-header">
+  <div class="header-image shadow">
+    <img [src]="image || 'default-playlist.png'" alt="Playlist Art" />
+  </div>
+  <div class="header-info">
+    <span class="type">Playlist</span>
+    <h1 class="title">{{ title }}</h1>
+    <div class="meta">
+      <span class="owner">By {{ owner }}</span>
+      <span class="bullet">•</span>
+      <span class="platform">{{ platform }}</span>
+      <span class="bullet">•</span>
+      <span class="count">{{ count }} songs</span>
+      <span class="bullet">•</span>
+      <span class="duration">{{ formatTime(duration) }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="playlist-controls">
+  <button class="play-button" (click)="playPlaylist()">
+    <svg
+      role="img"
+      height="28"
+      width="28"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      data-encore-id="icon"
+      class="Svg-sc-ytk21e-0 haNxPq"
+    >
+      <path
+        d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"
+      ></path>
+    </svg>
+  </button>
+</div> -->

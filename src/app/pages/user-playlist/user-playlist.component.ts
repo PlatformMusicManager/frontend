@@ -10,10 +10,10 @@ import { concatMap, delay, from, of } from 'rxjs';
 @Component({
   selector: 'app-user-playlist',
   imports: [],
-  templateUrl: './user-playlist.html',
-  styleUrl: './user-playlist.css',
+  templateUrl: './user-playlist.component.html',
+  styleUrl: './user-playlist.component.css',
 })
-export class UserPlaylist {
+export class UserPlaylistComponent {
   playlistData = signal<TransformedUserPlaylist | null>(null);
 
   private route = inject(ActivatedRoute);
@@ -28,14 +28,7 @@ export class UserPlaylist {
       ) as TransformedTrackInPlaylist[];
 
       from(partialTracks)
-        .pipe(
-          concatMap((track) =>
-            of(track).pipe(
-              delay(500),
-              concatMap((t) => this.libraryService.getFullTrack(t)),
-            ),
-          ),
-        )
+        .pipe(concatMap((track) => this.libraryService.getFullTrack(track).pipe(delay(500))))
         .subscribe((fullTrack) => {
           this.playlistData.update((data) => {
             if (!data) return data;

@@ -1,60 +1,65 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, input, computed, effect } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { PlayerService } from '../../services/player.service';
-import { PlatformService, Platform, ApiPlaylist } from '../../services/platform.service';
+import { PlatformService, Platform, ApiPlaylist } from '../../services/platform.service'; // Added ApiPlaylist import
 import { TrackItemComponent } from '../../components/media-items/track/track-item.component';
-import { switchMap, catchError, of } from 'rxjs';
+import { PlaylistHeaderComponent } from '../../sections/playlist-header/playlist-header.component';
+import { ToastService } from '../../services/toast.service';
+import checkParamsBeforeCall from '../../utils/check-params-before-call';
 
 @Component({
   selector: 'app-playlist',
   standalone: true,
-  imports: [CommonModule, TrackItemComponent],
+  imports: [TrackItemComponent, PlaylistHeaderComponent],
   templateUrl: './playlist.component.html',
   styleUrl: './playlist.component.css',
 })
-export class PlaylistComponent implements OnInit {
-  playlist = signal<ApiPlaylist | null>(null);
-  loading = signal(true);
-  error = signal<string | null>(null);
+export class PlaylistComponent {
+  // Use specific types for inputs to help the Resource
+  id = input<string | undefined>();
+  platform = input<Platform | undefined>();
 
-  private route = inject(ActivatedRoute);
   private playerService = inject(PlayerService);
   private platformService = inject(PlatformService);
+  private toastService = inject(ToastService);
 
-  ngOnInit() {
-    this.route.paramMap
-      .pipe(
-        switchMap((params) => {
-          const id = params.get('id');
-          const platform = params.get('platform');
-
-          if (!id || !platform) return of(null);
-          this.loading.set(true);
-
-          const platformEnum = platform as Platform;
-
-          return this.platformService.getPlaylist(id, platformEnum).pipe(
-            catchError((err) => {
-              console.error(err);
-              this.error.set('Failed to load playlist');
-              return of(null);
-            }),
-          );
-        }),
-      )
-      .subscribe((result) => {
-        if (result) {
-          this.playlist.set(result);
-        }
-        this.loading.set(false);
-      });
+  constructor() {
+    effect(() => {
+      const error = this.error();
+      // Показываем тост только если ошибка реально существует
+      if (error) {
+        this.toastService.show(error.message || 'Failed to load playlist', 'error');
+      }
+    });
   }
 
+  // Explicitly type the Resource <ValueType, RequestType>
+  playlistResource = rxResource<
+    ApiPlaylist,
+    { id: string | undefined; platform: Platform | undefined }
+  >({
+    params: () => ({
+      id: this.id(),
+      platform: this.platform(),
+    }),
+    stream: ({ params }) =>
+      checkParamsBeforeCall(
+        this.platformService.getPlaylist.bind(this.platformService),
+        params.id,
+        params.platform,
+      ),
+  });
+
+  // Derived signals
+  playlist = this.playlistResource.value;
+  isLoading = this.playlistResource.isLoading;
+  error = this.playlistResource.error;
+
   playPlaylist() {
-    const playlist = this.playlist();
-    if (playlist && playlist.tracks.length > 0) {
-      this.playerService.setQueue(playlist.tracks, 0);
+    const data = this.playlist();
+    // TypeScript now knows 'data' is ApiPlaylist because of the generic above
+    if (data && data.tracks && data.tracks.length > 0) {
+      this.playerService.setQueue(data.tracks, 0);
     }
   }
 }

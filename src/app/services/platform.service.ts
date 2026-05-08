@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 export enum Platform {
   Deezer = 'deezer',
   Soundcloud = 'soundcloud',
+  Own = 'own',
 }
 
 export interface ApiArtist {

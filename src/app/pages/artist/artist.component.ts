@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PlayerService } from '../../services/player.service';
@@ -8,9 +8,11 @@ import {
   ApiArtist,
   ApiPlaylist,
   ApiTrack,
+  ApiArtistDetails,
 } from '../../services/platform.service';
 import { TrackItemComponent } from '../../components/media-items/track/track-item.component';
 import { PlaylistCardComponent } from '../../components/media-items/playlist-card.component';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-artist',
@@ -19,33 +21,42 @@ import { PlaylistCardComponent } from '../../components/media-items/playlist-car
   templateUrl: './artist.component.html',
   styleUrl: './artist.component.css',
 })
-export class ArtistComponent implements OnInit {
+export class ArtistComponent {
+  // route params
+  id = input<string | undefined>();
+  platform = input<Platform | undefined>();
+
   artist = signal<ApiArtist | null>(null);
   tracks = signal<ApiTrack[]>([]);
   playlists = signal<ApiPlaylist[]>([]);
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
 
-  constructor(
-    private route: ActivatedRoute,
-    private playerService: PlayerService,
-    private platformService: PlatformService,
-  ) {}
+  private platformService = inject(PlatformService);
+  private playerService = inject(PlayerService);
 
-  ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      const platformStr = params.get('platform');
+  artistResource = rxResource<ApiArtistDetails, { id: string; platform: Platform }>({
+    params: () => ({
+      id: this.id()!,
+      platform: this.platform()!,
+    }),
+    stream: ({ params }) => this.platformService.getArtistDetails(params.id, params.platform),
+  });
 
-      if (id && platformStr) {
-        const platform = platformStr as Platform;
-        this.loadArtist(id, platform);
-      } else {
-        this.error.set('Invalid artist parameters');
-        this.loading.set(false);
-      }
-    });
-  }
+  // ngOnInit() {
+  //   this.route.paramMap.subscribe((params) => {
+  //     const id = params.get('id');
+  //     const platformStr = params.get('platform');
+
+  //     if (id && platformStr) {
+  //       const platform = platformStr as Platform;
+  //       this.loadArtist(id, platform);
+  //     } else {
+  //       this.error.set('Invalid artist parameters');
+  //       this.loading.set(false);
+  //     }
+  //   });
+  // }
 
   loadArtist(id: string, platform: Platform) {
     this.loading.set(true);
