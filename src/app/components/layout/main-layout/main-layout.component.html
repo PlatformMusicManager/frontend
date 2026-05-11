@@ -29,14 +29,7 @@
 
   <div class="content">
     <header>
-      <div class="search-bar">
-        <span class="icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search for artists, songs, or podcasts"
-          (keyup.enter)="onSearch($event)"
-        />
-      </div>
+      <app-search (enterPressed)="onSearch($event)"></app-search>
       <div class="header-right">
         <app-platform-selector></app-platform-selector>
         @if (user()) {

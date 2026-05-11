@@ -1,0 +1,37 @@
+:host {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search {
+  position: relative;
+}
+
+.my-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+}
+
+.search input {
+  padding: 10px 0 10px 44px;
+  border-radius: 10px;
+  border: 1px solid #3d3d3d;
+  width: 100%;
+  height: 100%;
+  background-color: #282828;
+  color: white;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.search input:focus {
+  border: 1px solid #6d6d6d;
+}
+
+.search input::placeholder {
+  color: #6c6c6c;
+}

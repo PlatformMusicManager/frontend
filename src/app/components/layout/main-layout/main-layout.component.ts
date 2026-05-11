@@ -7,11 +7,19 @@ import { PlatformSelectorComponent } from '../../platform-selector/platform-sele
 import { PlayerComponent } from '../../player/player.component';
 import { inject, OnInit } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { SearchComponent } from '../../search/search.component';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, PlatformSelectorComponent, PlayerComponent, DialogModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    PlatformSelectorComponent,
+    PlayerComponent,
+    DialogModule,
+    SearchComponent,
+  ],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.css'],
 })
@@ -61,8 +69,7 @@ export class MainLayoutComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  onSearch(event: any): void {
-    const query = event.target.value;
+  onSearch(query: string): void {
     if (query && query.trim().length > 0) {
       this.router.navigate(['/search'], { queryParams: { q: query } });
     }

@@ -1,7 +1,6 @@
 .playlist-controls {
-  margin-bottom: 32px;
+  margin-block: 20px;
   display: flex;
-  padding-top: 10px;
 }
 
 .play-button {

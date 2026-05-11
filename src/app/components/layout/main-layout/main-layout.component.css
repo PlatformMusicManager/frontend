@@ -100,13 +100,12 @@ nav li.active {
 }
 
 header {
-  height: 64px;
   background-color: var(--color-header-bg);
   display: flex;
   align-items: center;
   justify-content: space-between;
   /* Changed from flex-end to push search to left */
-  padding: 0 32px;
+  padding: 8px 32px;
   position: sticky;
   top: 0;
   top: 0;
@@ -207,4 +206,8 @@ header {
   transform: scale(1.05);
   background-color: var(--color-brand-primary);
   color: #000;
+}
+
+.scrollable-content {
+  overflow-y: auto;
 }

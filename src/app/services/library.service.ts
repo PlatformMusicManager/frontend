@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 import { ApiTrack, Platform, PlatformService } from './platform.service';
 
@@ -67,10 +67,8 @@ export class LibraryService {
   private currentUserSubject = new BehaviorSubject<UserWithPlaylists | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private platformService: PlatformService,
-  ) {}
+  private http = inject(HttpClient);
+  private platformService = inject(PlatformService);
 
   createPlaylist(title: string): Observable<PlaylistInUser> {
     return this.http
@@ -151,7 +149,6 @@ export class LibraryService {
                       },
                     ],
                     type: 'full',
-                    // ...foundTrack,
                   };
                 }
 

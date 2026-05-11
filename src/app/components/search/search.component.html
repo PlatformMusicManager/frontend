@@ -1,0 +1,11 @@
+<div class="search">
+  <svg class="my-icon">
+    <use xlink:href="search.svg#search-icon"></use>
+  </svg>
+  <input
+    type="text"
+    [formControl]="searchControl"
+    placeholder="Search..."
+    (keydown.enter)="onEnterPressed()"
+  />
+</div>

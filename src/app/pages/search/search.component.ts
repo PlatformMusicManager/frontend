@@ -46,6 +46,7 @@ export class SearchComponent {
             q: this.platformService.lastPerformedSearch.query,
           },
         });
+        return { query: this.platformService.lastPerformedSearch.query, platform: p };
       }
       return { query: q, platform: p };
     },
