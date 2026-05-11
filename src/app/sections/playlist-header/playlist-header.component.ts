@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import formatTime from '../../utils/format-time';
-import { Platform } from '../../services/platform.service';
+import { Platform, PlatformNames } from '../../services/platform.service';
 
 @Component({
   selector: 'app-playlist-header',
@@ -16,5 +16,6 @@ export class PlaylistHeaderComponent {
   @Input({ required: true }) count!: number;
   @Input({ required: true }) duration!: number;
 
-  formatTime = formatTime;
+  platformName = computed(() => PlatformNames[this.platform]);
+  formatedDuration = computed(() => formatTime(this.duration));
 }

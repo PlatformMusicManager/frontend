@@ -5,15 +5,17 @@
     </div>
     <nav>
       <ul>
-        <li
+        <!-- <li
           routerLink="/library"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
           <span class="icon">🏠</span> Main
+        </li> -->
+        <li routerLink="/search" routerLinkActive="active"><span class="icon">🔍</span> Search</li>
+        <li routerLink="/library" routerLinkActive="active">
+          <span class="icon">📚</span> Your Library
         </li>
-        <li><span class="icon">🔍</span> Search</li>
-        <li><span class="icon">📚</span> Your Library</li>
       </ul>
     </nav>
     <div class="sidebar-divider"></div>

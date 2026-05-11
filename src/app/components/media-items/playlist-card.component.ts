@@ -2,10 +2,6 @@ import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Platform } from '../../services/platform.service';
-// We need the ID to navigate, assuming the card input has it.
-// If 'title' etc are inputs, we might want to pass the full Playlist object or add an ID input.
-// Previous usage in search.component.html: [title]="playlist.title" [image]="playlist.picture" etc.
-// We should probably pass the whole playlist object or at least the ID.
 
 @Component({
   selector: 'app-playlist-card',
@@ -69,7 +65,7 @@ import { Platform } from '../../services/platform.service';
   ],
 })
 export class PlaylistCardComponent {
-  @Input() id!: string;
+  @Input({ required: true }) id!: string;
   @Input({ required: true }) title!: string;
   @Input() subtitle: string = '';
   @Input() image?: string;
@@ -78,7 +74,9 @@ export class PlaylistCardComponent {
   private router = inject(Router);
 
   navigateToPlaylist() {
-    if (this.id) {
+    if (this.platform === Platform.Own) {
+      this.router.navigate([`user-playlist/${this.id}`]);
+    } else {
       this.router.navigate([`playlist/${this.platform}/${this.id}`]);
     }
   }

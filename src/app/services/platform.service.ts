@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 export enum Platform {
@@ -7,6 +7,12 @@ export enum Platform {
   Soundcloud = 'soundcloud',
   Own = 'own',
 }
+
+export const PlatformNames = {
+  [Platform.Deezer]: 'Deezer',
+  [Platform.Soundcloud]: 'SoundCloud',
+  [Platform.Own]: 'Own',
+};
 
 export interface ApiArtist {
   id: string;
@@ -50,12 +56,23 @@ export interface ApiSearchPage {
   users: any[]; // Define properly if needed
 }
 
+export interface PerformedSearch {
+  query: string;
+  platform: Platform;
+  results: ApiSearchPage;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PlatformService {
   private platformSubject = new BehaviorSubject<Platform>(Platform.Deezer);
   public platform$ = this.platformSubject.asObservable();
+  private _lastPerformedSearch: PerformedSearch | null = null;
+
+  get lastPerformedSearch(): PerformedSearch | null {
+    return this._lastPerformedSearch;
+  }
 
   constructor(private http: HttpClient) {
     const savedPlatform = localStorage.getItem('platform') as Platform;
@@ -80,10 +97,23 @@ export class PlatformService {
   }
 
   search(query: string, platform: Platform): Observable<ApiSearchPage> {
-    return this.http.get<ApiSearchPage>(`/api/${platform}/search`, {
-      params: { query, offset: '0', limit: '10' },
-      withCredentials: true,
-    });
+    if (
+      this._lastPerformedSearch?.query === query &&
+      this._lastPerformedSearch?.platform === platform
+    ) {
+      return of(this._lastPerformedSearch.results);
+    }
+
+    return this.http
+      .get<ApiSearchPage>(`/api/${platform}/search`, {
+        params: { query, offset: '0', limit: '10' },
+        withCredentials: true,
+      })
+      .pipe(
+        tap((results) => {
+          this._lastPerformedSearch = { query, platform, results };
+        }),
+      );
   }
 
   getPlaylist(id: string, platform: Platform, save: boolean = false): Observable<ApiPlaylist> {

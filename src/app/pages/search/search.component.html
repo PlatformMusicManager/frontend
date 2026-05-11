@@ -1,38 +1,56 @@
-<div class="search-container">
-    <div *ngIf="isLoading" class="loading">Loading...</div>
+<div class="search-container main-window">
+  @if (isLoading()) {
+    <div class="loading">Loading...</div>
+  }
 
-    <div *ngIf="!isLoading && searchResults">
-        <section *ngIf="searchResults.tracks && searchResults.tracks.length > 0" class="results-section">
-            <h3>Songs</h3>
-            <div class="track-list">
-                <app-track-item *ngFor="let track of searchResults.tracks; let i = index" [track]="track"
-                    (playRequest)="playTrack(i)">
-                </app-track-item>
-            </div>
-        </section>
-
-        <section *ngIf="searchResults.playlists && searchResults.playlists.length > 0" class="results-section">
-            <h3>Playlists</h3>
-            <div class="grid-container">
-                <app-playlist-card *ngFor="let playlist of searchResults.playlists" [title]="playlist.title"
-                    [subtitle]="'By ' + playlist.parent_username" [image]="playlist.picture" [id]="playlist.id"
-                    [platform]="playlist.platform">
-                </app-playlist-card>
-            </div>
-        </section>
-
-        <section *ngIf="searchResults.artists && searchResults.artists.length > 0" class="results-section">
-            <h3>Artists</h3>
-            <div class="grid-container">
-                <app-artist-card *ngFor="let artist of searchResults.artists" [name]="artist.username"
-                    [image]="artist.picture" [id]="artist.id" [platform]="currentPlatform!">
-                </app-artist-card>
-            </div>
-        </section>
-
-        <div *ngIf="(!searchResults.tracks.length && !searchResults.playlists.length && !searchResults.artists.length)"
-            class="no-results">
-            No results found for "{{ currentQuery }}"
+  @let results = searchResults();
+  @if (!isLoading() && results) {
+    @if (results.tracks && results.tracks.length > 0) {
+      <section class="results-section">
+        <h3>Songs</h3>
+        <div class="track-list">
+          @for (track of results.tracks; let i = $index; track track.id) {
+            <app-track-item [track]="track" (playRequest)="playTrack(i)"></app-track-item>
+          }
         </div>
-    </div>
+      </section>
+    }
+
+    @if (results.playlists && results.playlists.length > 0) {
+      <section class="results-section">
+        <h3>Playlists</h3>
+        <div class="grid-container">
+          @for (playlist of results.playlists; track playlist.id) {
+            <app-playlist-card
+              [title]="playlist.title"
+              [subtitle]="'By ' + playlist.parent_username"
+              [image]="playlist.picture"
+              [id]="playlist.id"
+              [platform]="playlist.platform"
+            ></app-playlist-card>
+          }
+        </div>
+      </section>
+    }
+
+    @if (results.artists && results.artists.length > 0) {
+      <section class="results-section">
+        <h3>Artists</h3>
+        <div class="grid-container">
+          @for (artist of results.artists; track artist.id) {
+            <app-artist-card
+              [name]="artist.username"
+              [image]="artist.picture"
+              [id]="artist.id"
+              [platform]="platform()!"
+            ></app-artist-card>
+          }
+        </div>
+      </section>
+    }
+
+    @if (!results.tracks.length && !results.playlists.length && !results.artists.length) {
+      <div class="no-results">No results found for "{{ query() }}"</div>
+    }
+  }
 </div>

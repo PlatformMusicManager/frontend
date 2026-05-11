@@ -1,13 +1,15 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { switchMap, combineLatest, map, filter, catchError, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { PlayerService } from '../../services/player.service';
 import { PlatformService, Platform, ApiSearchPage } from '../../services/platform.service';
 import { TrackItemComponent } from '../../components/media-items/track/track-item.component';
 import { PlaylistCardComponent } from '../../components/media-items/playlist-card.component';
 import { ArtistCardComponent } from '../../components/media-items/artist-card.component';
+import checkParamsBeforeCall from '../../utils/check-params-before-call';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -22,54 +24,51 @@ import { ArtistCardComponent } from '../../components/media-items/artist-card.co
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
 })
-export class SearchComponent implements OnInit {
-  private route = inject(ActivatedRoute);
+export class SearchComponent {
+  query = input<string | undefined>(undefined, { alias: 'q' });
+
   private platformService = inject(PlatformService);
-  private cdr = inject(ChangeDetectorRef);
-  private playerService = inject(PlayerService); // Added injection
+  private playerService = inject(PlayerService);
+  private router = inject(Router);
 
-  // ...
+  platform = toSignal(this.platformService.platform$);
 
-  playTrack(index: number) {
-    if (this.searchResults?.tracks) {
-      this.playerService.setQueue(this.searchResults.tracks, index);
-    }
+  searchResource = rxResource<
+    ApiSearchPage | null,
+    { query: string | undefined; platform: Platform | undefined }
+  >({
+    params: () => {
+      const q = this.query();
+      const p = this.platform();
+      if ((!q || !p) && this.platformService.lastPerformedSearch) {
+        this.router.navigate(['/search'], {
+          queryParams: {
+            q: this.platformService.lastPerformedSearch.query,
+          },
+        });
+      }
+      return { query: q, platform: p };
+    },
+    stream: ({ params }) =>
+      checkParamsBeforeCall(
+        this.platformService.search.bind(this.platformService),
+        params.query,
+        params.platform,
+      ),
+  });
+
+  get searchResults() {
+    return this.searchResource.value;
   }
 
-  searchResults: ApiSearchPage | null = null;
-  isLoading = false;
-  currentQuery = '';
-  currentPlatform: Platform | null = null;
+  get isLoading() {
+    return this.searchResource.isLoading;
+  }
 
-  ngOnInit() {
-    combineLatest([this.route.queryParams, this.platformService.platform$])
-      .pipe(
-        map(([params, platform]) => ({ query: params['q'], platform })),
-        filter((data) => !!data.query),
-        switchMap((data) => {
-          this.currentQuery = data.query;
-          this.currentPlatform = data.platform;
-          this.searchResults = null; // Clear previous results
-          return this.platformService.search(data.query, data.platform).pipe(
-            catchError((err) => {
-              console.error('Search API failed', err);
-              return of(null);
-            }),
-          );
-        }),
-      )
-      .subscribe({
-        next: (results) => {
-          console.log('Search results received:', results);
-          this.searchResults = results;
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('Search subscription failed', err);
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        },
-      });
+  playTrack(index: number) {
+    const results = this.searchResults();
+    if (results?.tracks) {
+      this.playerService.setQueue(results.tracks, index);
+    }
   }
 }

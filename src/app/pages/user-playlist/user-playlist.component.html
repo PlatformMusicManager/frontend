@@ -1,1 +1,52 @@
-<p>user-playlist works!</p>
+@if (playlist()) {
+  <div class="playlist-page">
+    <app-playlist-header
+      [image]="null"
+      [title]="playlist()!.title"
+      [platform]="Platform.Own"
+      [owner]="playlist()!.owner_name"
+      [count]="playlist()!.tracks.length"
+      [duration]="playlist()!.tracks.reduce((acc, t) => t.type === 'full' ? acc + t.duration : acc, 0)"
+    ></app-playlist-header>
+
+    <app-playlist-controls (play)="playPlaylist()"></app-playlist-controls>
+
+    <div class="track-list">
+      <div class="track-header-row">
+        <span class="col-num">#</span>
+        <span class="col-title">Title</span>
+        <span class="col-time">
+          <svg
+            role="img"
+            height="16"
+            width="16"
+            aria-hidden="true"
+            viewBox="0 0 16 16"
+            data-encore-id="icon"
+            class="Svg-sc-ytk21e-0 haNxPq"
+          >
+            <path
+              d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"
+            ></path>
+            <path
+              d="M8 3.25a.75.75 0 0 1 .75.75v3.25H11a.75.75 0 0 1 0 1.5H7.25V4A.75.75 0 0 1 8 3.25z"
+            ></path>
+          </svg>
+        </span>
+      </div>
+      <div class="tracks">
+        @for (track of playlist()?.tracks; track $index) {
+          @if (track.type === 'full') {
+            <app-track-item [track]="track"></app-track-item>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}
+@if (isLoading()) {
+  <div class="loading-state">Loading...</div>
+}
+@if (error()) {
+  <div class="error-state">{{ error() }}</div>
+}

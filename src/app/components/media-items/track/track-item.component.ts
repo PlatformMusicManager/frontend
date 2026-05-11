@@ -1,11 +1,9 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiTrack } from '../../../services/platform.service';
 import { PlayerService } from '../../../services/player.service';
-import {
-  TransformedTrackInPlaylist,
-  TransformedTrackInPlaylistFullData,
-} from '../../../services/library.service';
+import { TransformedTrackInPlaylistFullData } from '../../../services/library.service';
+import formatTime from '../../../utils/format-time';
 
 @Component({
   selector: 'app-track-item',
@@ -19,11 +17,7 @@ export class TrackItemComponent {
   @Output() playRequest = new EventEmitter<void>();
   private playerService = inject(PlayerService);
 
-  formatDuration(ms: number): string {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(0);
-    return minutes + ':' + (Number(seconds) < 10 ? '0' : '') + seconds;
-  }
+  formatedDuration = computed(() => formatTime(this.track.duration));
 
   playTrack() {
     if (this.playRequest.observed) {

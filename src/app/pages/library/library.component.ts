@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LibraryService, UserWithPlaylists } from '../../services/library.service';
+import { PlaylistCardComponent } from '../../components/media-items/playlist-card.component';
+import { Platform } from '../../services/platform.service';
 
 @Component({
     selector: 'app-library',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, PlaylistCardComponent],
     templateUrl: './library.component.html',
     styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit {
     user: UserWithPlaylists | null = null;
     greeting: string = 'Good day';
+    readonly Platform = Platform;
 
     constructor(private libraryService: LibraryService) { }
 

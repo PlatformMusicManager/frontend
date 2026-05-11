@@ -1,0 +1,32 @@
+.playlist-header {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.header-image {
+  width: 300px;
+  height: 300px;
+}
+
+.header-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-block: auto;
+}
+
+.meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.meta span {
+  font-size: 16px;
+}

@@ -1,23 +1,20 @@
-<section class="greeting-section">
-    <h1>{{ greeting }}</h1>
+<section class="greeting-section main-window">
+  <h1>{{ greeting }}</h1>
 
-    <div class="grid-container" *ngIf="user?.playlists?.length; else noPlaylists">
-        <div class="card" *ngFor="let playlist of user?.playlists">
-            <div class="card-image-placeholder">
-                <span>🎵</span>
-            </div>
-            <div class="card-content">
-                <h3>{{ playlist.title }}</h3>
-                <p>By {{ user?.username }}</p>
-            </div>
-            <button class="play-btn">▶</button>
-            <button class="delete-btn" (click)="deletePlaylist(playlist.id, $event)">🗑️</button>
-        </div>
+  @if (user?.playlists?.length) {
+    <div class="grid-container">
+      @for (playlist of user!.playlists; track playlist.id) {
+        <app-playlist-card
+          [id]="playlist.id.toString()"
+          [title]="playlist.title"
+          [subtitle]="'By ' + user!.username"
+          [platform]="Platform.Own"
+        />
+      }
     </div>
-
-    <ng-template #noPlaylists>
-        <div class="empty-state">
-            <p>You don't have any playlists yet.</p>
-        </div>
-    </ng-template>
+  } @else {
+    <div class="empty-state">
+      <p>You don't have any playlists yet.</p>
+    </div>
+  }
 </section>

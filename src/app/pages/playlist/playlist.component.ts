@@ -1,4 +1,4 @@
-import { Component, inject, input, computed, effect } from '@angular/core';
+import { Component, inject, input, effect } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { PlayerService } from '../../services/player.service';
 import { PlatformService, Platform, ApiPlaylist } from '../../services/platform.service'; // Added ApiPlaylist import
@@ -6,11 +6,12 @@ import { TrackItemComponent } from '../../components/media-items/track/track-ite
 import { PlaylistHeaderComponent } from '../../sections/playlist-header/playlist-header.component';
 import { ToastService } from '../../services/toast.service';
 import checkParamsBeforeCall from '../../utils/check-params-before-call';
+import { PlaylistControlsComponent } from '../../sections/playlist-controls/playlist-controls.component';
 
 @Component({
   selector: 'app-playlist',
   standalone: true,
-  imports: [TrackItemComponent, PlaylistHeaderComponent],
+  imports: [TrackItemComponent, PlaylistHeaderComponent, PlaylistControlsComponent],
   templateUrl: './playlist.component.html',
   styleUrl: './playlist.component.css',
 })

@@ -1,49 +1,70 @@
-<div class="artist-page" *ngIf="!loading(); else loader">
-    <div class="artist-header" *ngIf="artist() as a">
-        <div class="artist-cover">
-            <img [src]="a.picture || 'default-user.png'" [alt]="a.username" class="cover-image">
+@let a = artist();
+@if (!isLoading() && a) {
+  <div class="artist-page">
+    <div class="artist-header">
+      <div class="artist-cover">
+        <img [src]="a.artist.picture" [alt]="a.artist.username" class="cover-image" />
+      </div>
+      <div class="artist-info">
+        <span class="type">Artist</span>
+        <h1 class="name">{{ a.artist.username }}</h1>
+        <div class="actions">
+          @if (a.tracks.length > 0) {
+            <button class="play-button" (click)="playAll()">
+              <span class="icon">▶</span>
+            </button>
+          }
         </div>
-        <div class="artist-info">
-            <span class="type">Artist</span>
-            <h1 class="name">{{ a.username }}</h1>
-            <div class="actions">
-                <button class="play-button" (click)="playAll()" *ngIf="tracks().length > 0">
-                    <span class="icon">▶</span>
-                </button>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <div class="tracks-section" *ngIf="tracks().length > 0">
+    @if (a.tracks.length > 0) {
+      <div class="tracks-section">
         <h2>Popular Tracks</h2>
         <div class="track-list">
-            <app-track-item *ngFor="let track of tracks(); let i = index" [track]="track"
-                (playRequest)="playTrackFromList(i)">
+          @for (track of a.tracks; track $index) {
+            <app-track-item [track]="track" (playRequest)="playTrackFromList($index)">
             </app-track-item>
+          }
         </div>
-    </div>
+      </div>
+    }
 
-    <div class="playlists-section" *ngIf="playlists().length > 0">
+    @if (a.playlists.length > 0) {
+      <div class="playlists-section">
         <h2>Playlists</h2>
         <div class="playlist-grid">
-            <app-playlist-card *ngFor="let playlist of playlists()" [id]="playlist.id" [title]="playlist.title"
-                [subtitle]="playlist.size + ' tracks'" [image]="playlist.picture" [platform]="playlist.platform">
+          @for (playlist of a.playlists; track playlist.id) {
+            <app-playlist-card
+              [id]="playlist.id"
+              [title]="playlist.title"
+              [subtitle]="playlist.size + ' tracks'"
+              [image]="playlist.picture"
+              [platform]="playlist.platform"
+            >
             </app-playlist-card>
+          }
         </div>
-    </div>
+      </div>
+    }
 
-    <div class="no-tracks" *ngIf="!loading() && tracks().length === 0">
+    @if (a.tracks.length === 0) {
+      <div class="no-tracks">
         <p>No tracks found for this artist.</p>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}
 
-<ng-template #loader>
-    <div class="loading-container">
-        <div class="spinner"></div>
-        <p>Loading artist...</p>
-    </div>
-</ng-template>
+@if (isLoading()) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading artist...</p>
+  </div>
+}
 
-<div class="error-container" *ngIf="error()">
+@if (error()) {
+  <div class="error-container">
     <p>{{ error() }}</p>
-</div>
+  </div>
+}
