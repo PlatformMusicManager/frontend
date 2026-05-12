@@ -80,11 +80,21 @@ export class PlayerService {
     this._play(track, save);
   }
 
-  setQueue(tracks: ApiTrack[], startFromIndex: number = 0) {
+  setQueue(
+    tracks: ApiTrack[],
+    startFromIndex: number | null = null,
+    useShuffle: boolean | null = null,
+  ) {
     this.originalQueue.set([...tracks]); // Clone to be safe
 
-    if (this.shuffle()) {
-      const trackToPlay = tracks[startFromIndex];
+    if (useShuffle === null) {
+      useShuffle = this.shuffle();
+    } else {
+      this.shuffle.set(useShuffle);
+    }
+
+    if (useShuffle) {
+      const trackToPlay = tracks[startFromIndex || Math.floor(Math.random() * tracks.length)];
       const otherTracks = tracks.filter((_, i) => i !== startFromIndex);
       const shuffled = this.shuffleArray(otherTracks);
       const newQueue = [trackToPlay, ...shuffled];
@@ -93,6 +103,7 @@ export class PlayerService {
       this._play(trackToPlay);
     } else {
       this.queue.set(tracks);
+      startFromIndex = startFromIndex || 0;
       this.currentIndex.set(startFromIndex);
       if (tracks.length > startFromIndex && startFromIndex >= 0) {
         this._play(tracks[startFromIndex]);

@@ -1,6 +1,7 @@
 .playlist-controls {
   margin-block: 20px;
   display: flex;
+  justify-content: space-between;
 }
 
 .play-button {
@@ -26,4 +27,10 @@
 
 .play-button svg {
   fill: currentColor;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

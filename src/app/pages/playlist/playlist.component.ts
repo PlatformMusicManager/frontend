@@ -55,12 +55,4 @@ export class PlaylistComponent {
   playlist = this.playlistResource.value;
   isLoading = this.playlistResource.isLoading;
   error = this.playlistResource.error;
-
-  playPlaylist() {
-    const data = this.playlist();
-    // TypeScript now knows 'data' is ApiPlaylist because of the generic above
-    if (data && data.tracks && data.tracks.length > 0) {
-      this.playerService.setQueue(data.tracks, 0);
-    }
-  }
 }

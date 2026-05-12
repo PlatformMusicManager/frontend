@@ -1,16 +1,17 @@
 <div class="main-window">
-  @if (playlist()) {
+  @let playlistLet = playlist();
+  @if (playlistLet) {
     <div class="playlist-page">
       <app-playlist-header
         [image]="null"
-        [title]="playlist()!.title"
+        [title]="playlistLet.title"
         [platform]="Platform.Own"
-        [owner]="playlist()!.owner_name"
-        [count]="playlist()!.tracks.length"
-        [duration]="playlist()!.tracks.reduce((acc, t) => t.type === 'full' ? acc + t.duration : acc, 0)"
+        [owner]="playlistLet.owner_name"
+        [count]="playlistLet.tracks.length"
+        [duration]="playlistLet.tracks.reduce((acc, t) => t.type === 'full' ? acc + t.duration : acc, 0)"
       ></app-playlist-header>
 
-      <app-playlist-controls (play)="playPlaylist()"></app-playlist-controls>
+      <app-playlist-controls [playlist]="{ ...playlistLet, type: 'user' }"></app-playlist-controls>
 
       <div class="track-list">
         <div class="track-header-row">

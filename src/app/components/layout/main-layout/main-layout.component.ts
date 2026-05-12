@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { LibraryService, UserWithPlaylists } from '../../../services/library.service';
@@ -8,6 +8,7 @@ import { PlayerComponent } from '../../player/player.component';
 import { inject, OnInit } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { SearchComponent } from '../../search/search.component';
+import { PlayerService } from '../../../services/player.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -27,8 +28,11 @@ export class MainLayoutComponent implements OnInit {
   user = signal<UserWithPlaylists | null>(null);
   showUserMenu = false;
   private libraryService = inject(LibraryService);
+  private playerService = inject(PlayerService);
   private router = inject(Router);
   private dialog = inject(Dialog);
+
+  isPlayerOpen = computed(() => this.playerService.currentTrack() !== null);
 
   ngOnInit(): void {
     this.libraryService.currentUser$.subscribe((data) => {

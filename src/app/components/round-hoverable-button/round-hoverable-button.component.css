@@ -1,0 +1,50 @@
+.round-hoverable-button {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.round-hoverable-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #a2a2a2;
+  opacity: 0;
+  transition: opacity 0.1s;
+  border-radius: 50%;
+}
+
+.round-hoverable-button:hover::after,
+.round-hoverable-button.active::after {
+  opacity: 0.2;
+}
+
+.content {
+  z-index: 1;
+}
+
+.round-hoverable-button.small {
+  width: 32px;
+  height: 32px;
+}
+
+.round-hoverable-button.medium {
+  width: 48px;
+  height: 48px;
+}
+
+.round-hoverable-button.large {
+  width: 64px;
+  height: 64px;
+}

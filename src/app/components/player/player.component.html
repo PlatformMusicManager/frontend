@@ -1,82 +1,131 @@
-<div class="player-container" *ngIf="currentTrack()">
+@if (currentTrack()) {
+  <div class="player-container">
     <div class="track-info">
-        <img [src]="currentArt" alt="Album Art" class="track-art" *ngIf="currentArt">
-        <div class="track-details">
-            <span class="track-title" [title]="currentTitle">{{ currentTitle }}</span>
-            <span class="track-artist" [title]="currentArtist">{{ currentArtist }}</span>
-        </div>
+      @if (currentArt) {
+        <img [src]="currentArt" alt="Album Art" class="track-art" />
+      }
+      <div class="track-details">
+        <span class="track-title" [title]="currentTitle">{{ currentTitle }}</span>
+        <span class="track-artist" [title]="currentArtist">{{ currentArtist }}</span>
+      </div>
     </div>
 
     <div class="player-controls">
-        <div class="control-buttons">
-            <button class="icon-btn small-btn" [class.active]="playerService.shuffle()" (click)="toggleShuffle()"
-                title="Shuffle">🔀</button>
-            <button class="icon-btn" title="Previous" (click)="previousTrack()">⏮</button>
-            <button class="play-pause-btn" (click)="togglePlay()">
-                <ng-container *ngIf="isLoading(); else playState">
-                    <span>⌛</span>
-                </ng-container>
-                <ng-template #playState>
-                    <span *ngIf="isPlaying()">⏸</span>
-                    <span *ngIf="!isPlaying()">▶</span>
-                </ng-template>
-            </button>
-            <button class="icon-btn" title="Next" (click)="nextTrack()">⏭</button>
-            <button class="icon-btn small-btn" [class.active]="playerService.repeatMode() !== RepeatMode.OFF"
-                (click)="toggleRepeat()" title="Repeat">
-                <span *ngIf="playerService.repeatMode() === RepeatMode.ONE">🔂</span>
-                <span *ngIf="playerService.repeatMode() !== RepeatMode.ONE">🔁</span>
-            </button>
-        </div>
+      <div class="control-buttons">
+        <app-round-hoverable-button class="icon" size="small" (click)="toggleShuffle()">
+          <svg class="shuffle-icon svg-icon-stroke">
+            <use xlink:href="/shuffle.svg#shuffle"></use>
+          </svg>
+        </app-round-hoverable-button>
+        <app-round-hoverable-button class="icon" size="small" (click)="previousTrack()">
+          <svg class="prev-icon svg-icon-stroke">
+            <use xlink:href="/prev.svg#prev"></use>
+          </svg>
+        </app-round-hoverable-button>
+        <app-round-hoverable-button size="small" backgroundColor="#fff" (click)="togglePlay()">
+          @if (isLoading()) {
+            <app-dots-loading class="loading"></app-dots-loading>
+          } @else {
+            @if (isPlaying()) {
+              <img src="/pause.svg" alt="Pause" class="play-pause-icon pause-icon" />
+            } @else {
+              <img src="/play.svg" alt="Play" class="play-pause-icon play-icon" />
+            }
+          }
+        </app-round-hoverable-button>
+        <app-round-hoverable-button class="icon" size="small" (click)="nextTrack()">
+          <svg class="next-icon svg-icon-stroke">
+            <use xlink:href="/prev.svg#prev"></use>
+          </svg>
+        </app-round-hoverable-button>
 
-        <div class="playback-bar">
-            <span>{{ formatTime(currentTime()) }}</span>
-            <div class="progress-container" (click)="onSeek($event)">
-                <div class="progress-bar" [style.width]="progressWidth()"></div>
-            </div>
-            <span>{{ formatTime(duration()) }}</span>
+        <app-round-hoverable-button class="icon" size="small" (click)="toggleRepeat()">
+          @if (playerService.repeatMode() === RepeatMode.ONE) {
+            <svg class="repeat-icon repeat-one-icon svg-icon-fill">
+              <use xlink:href="/repeat-one.svg#repeat-one"></use>
+            </svg>
+          } @else {
+            <svg class="repeat-icon svg-icon-fill">
+              <use xlink:href="/repeat.svg#repeat"></use>
+            </svg>
+          }
+        </app-round-hoverable-button>
+      </div>
+
+      <div class="playback-bar">
+        <span>{{ formatTime(currentTime()) }}</span>
+        <div class="progress-container" (click)="onSeek($event)">
+          <div class="progress-bar" [style.width]="progressWidth()"></div>
         </div>
+        <span>{{ formatTime(duration()) }}</span>
+      </div>
     </div>
 
     <div class="volume-controls">
-        <button class="icon-btn" [class.active]="showQueue" (click)="toggleQueue()" title="Queue">≣</button>
+      <app-round-hoverable-button
+        class="icon"
+        [isActive]="showQueue"
+        (click)="toggleQueue()"
+        size="small"
+      >
+        <svg class="burger-icon svg-icon-fill">
+          <use xlink:href="/burger.svg#burger"></use>
+        </svg>
+      </app-round-hoverable-button>
     </div>
-</div>
+  </div>
+}
 
-<div class="queue-overlay" *ngIf="showQueue">
+@if (showQueue) {
+  <div class="queue-overlay">
     <div class="queue-header">
-        <h3>Queue</h3>
-        <button class="close-btn" (click)="toggleQueue()">×</button>
+      <h3>Queue</h3>
+      <button class="close-btn" (click)="toggleQueue()">×</button>
     </div>
     <div class="queue-list" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div class="queue-item" *ngFor="let track of playerService.queue(); let i = index" cdkDrag
-            (cdkDragStarted)="onDragStarted()" (cdkDragEnded)="onDragEnded()"
-            [class.active]="i === playerService.currentIndex()" (click)="playQueueTrack(track, i)">
+      @for (track of playerService.queue(); track track.id; let i = $index) {
+        <div
+          class="queue-item"
+          cdkDrag
+          (cdkDragStarted)="onDragStarted()"
+          (cdkDragEnded)="onDragEnded()"
+          [class.active]="i === playerService.currentIndex()"
+          (click)="playQueueTrack(track, i)"
+        >
+          <div class="queue-item-drag-placeholder" *cdkDragPlaceholder></div>
 
-            <div class="queue-item-drag-placeholder" *cdkDragPlaceholder></div>
+          <div class="item-left">
+            @if (i !== playerService.currentIndex()) {
+              <span class="queue-index">{{ i + 1 }}</span>
+            } @else {
+              <span class="playing-indicator">▶</span>
+            }
+          </div>
 
-            <div class="item-left">
-                <span class="queue-index" *ngIf="i !== playerService.currentIndex()">{{ i + 1 }}</span>
-                <span class="playing-indicator" *ngIf="i === playerService.currentIndex()">▶</span>
+          <div class="queue-track-info">
+            <span class="queue-title">{{ track.title }}</span>
+            @for (artist of track.artists; track artist.username) {
+              <span class="queue-artist">{{ artist.username }}</span>
+            }
+          </div>
+
+          <div class="queue-actions">
+            <span class="queue-duration">{{ formatTime(track.duration) }}</span>
+
+            <div class="action-buttons">
+              <button
+                class="action-btn delete-btn"
+                (click)="$event.stopPropagation(); removeFromQueue(i)"
+              >
+                ×
+              </button>
             </div>
-
-            <div class="queue-track-info">
-                <span class="queue-title">{{ track.title }}</span>
-                <span class="queue-artist" *ngFor="let artist of track.artists">{{ artist.username }}</span>
-            </div>
-
-            <div class="queue-actions">
-                <span class="queue-duration">{{ formatTime(track.duration / 1000) }}</span>
-
-                <div class="action-buttons">
-                    <button class="action-btn delete-btn"
-                        (click)="$event.stopPropagation(); removeFromQueue(i)">×</button>
-                    <!-- Drag handle icon (optional) or just drag whole row -->
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="empty-queue" *ngIf="playerService.queue().length === 0">
-            Queue is empty
-        </div>
+      }
+      @if (playerService.queue().length === 0) {
+        <div class="empty-queue">Queue is empty</div>
+      }
     </div>
-</div>
+  </div>
+}

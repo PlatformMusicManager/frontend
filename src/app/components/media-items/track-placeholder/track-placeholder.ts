@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { TransformedTrackInPlaylist } from '../../../services/library.service';
-import { DotsLoading } from '../../dots-loading/dots-loading';
+import { DotsLoadingComponent } from '../../dots-loading/dots-loading.component';
 
 @Component({
   selector: 'app-track-placeholder',
-  imports: [DotsLoading],
+  imports: [DotsLoadingComponent],
   templateUrl: './track-placeholder.html',
   styleUrl: './track-placeholder.css',
 })

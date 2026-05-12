@@ -1,16 +1,24 @@
 <div class="playlist-controls">
-  <button class="play-button" (click)="play.emit()">
-    <svg
-      role="img"
-      height="28"
-      width="28"
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      data-encore-id="icon"
-    >
-      <path
-        d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"
-      ></path>
-    </svg>
-  </button>
+  <div class="buttons">
+    <button class="play-button" (click)="playPlaylist()">
+      <svg
+        role="img"
+        height="28"
+        width="28"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        data-encore-id="icon"
+      >
+        <path
+          d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"
+        ></path>
+      </svg>
+    </button>
+    <app-round-hoverable-button (click)="playShuffle()">
+      <svg stroke="white" fill="none" stroke-width="1.5" width="24" height="24" viewBox="0 0 24 24">
+        <use xlink:href="/shuffle.svg#shuffle"></use>
+      </svg>
+    </app-round-hoverable-button>
+  </div>
+  <app-search></app-search>
 </div>

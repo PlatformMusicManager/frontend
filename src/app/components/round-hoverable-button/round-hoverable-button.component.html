@@ -1,0 +1,9 @@
+<button
+  class="round-hoverable-button {{ size() }}"
+  [class.active]="isActive()"
+  [style.background-color]="backgroundColor()"
+>
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</button>
