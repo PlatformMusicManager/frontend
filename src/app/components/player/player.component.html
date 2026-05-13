@@ -13,7 +13,7 @@
     <div class="player-controls">
       <div class="control-buttons">
         <app-round-hoverable-button class="icon" size="small" (click)="toggleShuffle()">
-          <svg class="shuffle-icon svg-icon-stroke">
+          <svg class="shuffle-icon svg-icon-stroke" [class.active]="isShuffle()">
             <use xlink:href="/shuffle.svg#shuffle"></use>
           </svg>
         </app-round-hoverable-button>
@@ -41,11 +41,14 @@
 
         <app-round-hoverable-button class="icon" size="small" (click)="toggleRepeat()">
           @if (playerService.repeatMode() === RepeatMode.ONE) {
-            <svg class="repeat-icon repeat-one-icon svg-icon-fill">
+            <svg
+              class="repeat-icon repeat-one-icon svg-icon-fill"
+              [class.active]="repeatMode() === RepeatMode.ONE"
+            >
               <use xlink:href="/repeat-one.svg#repeat-one"></use>
             </svg>
           } @else {
-            <svg class="repeat-icon svg-icon-fill">
+            <svg class="repeat-icon svg-icon-fill" [class.active]="repeatMode() === RepeatMode.ALL">
               <use xlink:href="/repeat.svg#repeat"></use>
             </svg>
           }

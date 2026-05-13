@@ -1,0 +1,8 @@
+@if (isOpen()) {
+  @for (option of options(); track option.label) {
+    <div class="context-menu-option" (click)="option.action()">
+      <img [src]="option.icon" alt="" />
+      <span class="context-menu-option-label">{{ option.label }}</span>
+    </div>
+  }
+}

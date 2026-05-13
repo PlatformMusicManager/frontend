@@ -92,6 +92,23 @@
   fill: #fff;
 }
 
+.svg-icon-stroke.active {
+  stroke: #7958ff;
+}
+
+.svg-icon-fill.active {
+  fill: #7958ff;
+}
+
+.shuffle-icon {
+  scale: 0.95;
+  stroke-width: 1.5;
+}
+
+.repeat-icon {
+  scale: 0.8;
+}
+
 .play-icon {
   translate: 1px 0;
   width: 32px;

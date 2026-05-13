@@ -1,0 +1,16 @@
+:host {
+  justify-content: space-around;
+}
+
+.context-menu-option {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.context-menu-option img {
+  width: 24px;
+  height: 24px;
+}

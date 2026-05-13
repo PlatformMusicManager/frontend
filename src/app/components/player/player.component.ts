@@ -21,6 +21,9 @@ export class PlayerComponent {
   currentTime = this.playerService.currentTime;
   duration = this.playerService.duration;
 
+  isShuffle = this.playerService.shuffle;
+  repeatMode = this.playerService.repeatMode;
+
   progressWidth = computed(() => {
     const dur = this.duration();
     if (!dur) return '0%';
