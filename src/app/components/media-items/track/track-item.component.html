@@ -12,13 +12,7 @@
     </div>
   </div>
   <div class="track-actions">
-    <button
-      class="add-queue-btn"
-      title="Add to Queue"
-      (click)="$event.stopPropagation(); addToQueue()"
-    >
-      +
-    </button>
+    <button class="add-queue-btn" title="Add to Queue" (click)="openContextMenu($event)">+</button>
   </div>
   <div class="track-duration">{{ formatedDuration() }}</div>
 </div>

@@ -27,7 +27,7 @@ export class ContextMenuService {
   private closeEvent = new EventEmitter<void>();
 
   constructor() {
-    fromEvent(window, 'scroll').subscribe(() => {
+    fromEvent(document, 'scroll', { capture: true }).subscribe(() => {
       this.closeContextMenu();
     });
     fromEvent(window, 'resize').subscribe(() => {

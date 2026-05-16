@@ -4,6 +4,7 @@ import { ApiTrack } from '../../../services/platform.service';
 import { PlayerService } from '../../../services/player.service';
 import { TransformedTrackInPlaylistFullData } from '../../../services/library.service';
 import formatTime from '../../../utils/format-time';
+import { ContextMenuService } from '../../../services/context-menu.service';
 
 @Component({
   selector: 'app-track-item',
@@ -16,6 +17,7 @@ export class TrackItemComponent {
   @Input({ required: true }) track!: ApiTrack | TransformedTrackInPlaylistFullData;
   @Output() playRequest = new EventEmitter<void>();
   private playerService = inject(PlayerService);
+  private contextMenuService = inject(ContextMenuService);
 
   formatedDuration = computed(() => formatTime(this.track.duration));
 
@@ -29,5 +31,27 @@ export class TrackItemComponent {
 
   addToQueue() {
     this.playerService.addToQueue(this.track);
+  }
+
+  openContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    this.contextMenuService.openContextMenu({
+      position: { x: rect.left, y: rect.top },
+      elementBounds: {
+        width: rect.width,
+        height: rect.height,
+      },
+      openAt: 'middle',
+      options: [
+        {
+          icon: 'add',
+          label: 'Add to Queue',
+          action: () => this.addToQueue(),
+        },
+      ],
+    });
   }
 }

@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  ElementRef,
-  HostListener,
-  inject,
-  Renderer2,
-} from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, Renderer2 } from '@angular/core';
 import { ContextMenuService } from '../../services/context-menu.service';
 
 @Component({
@@ -28,31 +20,42 @@ export class ContextMenuComponent {
   private elementWidth = 300;
 
   constructor() {
-    this.renderer.setProperty(this.element, 'style.position', 'absolute');
-    this.renderer.setProperty(this.element, 'style.display', 'none');
-    this.renderer.setProperty(this.element, 'style.width', this.elementWidth + 'px');
-    this.renderer.setProperty(this.element, 'style.height', this.elementHeight + 'px');
+    this.renderer.setStyle(this.element.nativeElement, 'position', 'fixed');
+    this.renderer.setStyle(this.element.nativeElement, 'display', 'none');
+    this.renderer.setStyle(this.element.nativeElement, 'width', this.elementWidth + 'px');
+    this.renderer.setStyle(this.element.nativeElement, 'height', '0px');
     effect(() => {
       const options = this.contextMenuOptions();
+      if (!options) return;
 
-      if (!options) return this.renderer.setProperty(this.element, 'style.display', 'none');
-      this.renderer.setProperty(this.element, 'style.display', 'flex');
+      const menuHeight = this.elementHeight * options.options.length;
+
+      if (!options) {
+        this.renderer.setStyle(this.element.nativeElement, 'display', 'none');
+        return;
+      }
+      this.renderer.setStyle(this.element.nativeElement, 'display', 'flex');
 
       let y = options.position.y;
-      if (options.openAt === 'middle')
-        y -= this.elementHeight / 2 + options.elementBounds.height / 2;
-      if (y < window.scrollY) y = window.scrollY;
-      if (y + this.elementHeight > this.screenHeight)
-        y = this.screenHeight - this.elementHeight + window.scrollY;
+      if (options.openAt === 'middle') y += options.elementBounds.height / 2 - menuHeight / 2;
+      if (y < 0) y = 0;
+      if (y + menuHeight > this.screenHeight) y = this.screenHeight - menuHeight;
 
       let x = options.position.x + options.elementBounds.width;
-      if (x + this.elementWidth > this.screenWidth + window.scrollX) {
-        x -= this.elementWidth + options.elementBounds.width;
-        if (x < window.scrollX) x = window.scrollX;
+      if (x + this.elementWidth > this.screenWidth) {
+        x = options.position.x - this.elementWidth;
+        if (x < 0) x = 0;
       }
 
-      this.renderer.setProperty(this.element, 'style.top', y + 'px');
-      this.renderer.setProperty(this.element, 'style.left', x + 'px');
+      this.renderer.setStyle(this.element.nativeElement, 'top', y + 'px');
+      this.renderer.setStyle(this.element.nativeElement, 'left', x + 'px');
+      this.renderer.setStyle(this.element.nativeElement, 'height', menuHeight + 'px');
+    });
+
+    this.renderer.listen('document', 'click', (e: MouseEvent) => {
+      if (this.isOpen() && !this.element.nativeElement.contains(e.target as Node)) {
+        this.contextMenuService.closeContextMenu();
+      }
     });
   }
 

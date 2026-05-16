@@ -9,6 +9,7 @@ import { inject, OnInit } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { SearchComponent } from '../../search/search.component';
 import { PlayerService } from '../../../services/player.service';
+import { ContextMenuComponent } from '../../context-menu/context-menu.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -20,6 +21,7 @@ import { PlayerService } from '../../../services/player.service';
     PlayerComponent,
     DialogModule,
     SearchComponent,
+    ContextMenuComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.css'],
@@ -53,7 +55,7 @@ export class MainLayoutComponent implements OnInit {
   openCreatePlaylistModal(): void {
     const dialogRef = this.dialog.open<string>(CreatePlaylistModalComponent, {
       width: '400px',
-      // Default panel class or custom if needed
+      // Default panel class or custom if neededlilovayavata
     });
 
     dialogRef.closed.subscribe((result) => {

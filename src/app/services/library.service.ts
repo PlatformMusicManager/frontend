@@ -42,6 +42,7 @@ export interface UserPlaylistBase {
 }
 
 export interface UserPlaylistWithTracks extends UserPlaylistBase {
+  last_track_added_at?: string;
   tracks: TrackInPlaylistResponse[];
   found_tracks_soundcloud: FullTrackResponse[];
   found_tracks_deezer: FullTrackResponse[];
@@ -57,6 +58,7 @@ export interface TransformedTrackInPlaylist extends TrackInPlaylistResponse {
 
 export interface TransformedUserPlaylist extends UserPlaylistBase {
   tracks: (TransformedTrackInPlaylistFullData | TransformedTrackInPlaylist)[];
+  last_track_added_at: Date | null;
 }
 
 @Injectable({
@@ -121,6 +123,9 @@ export class LibraryService {
         map((playlist): TransformedUserPlaylist => {
           return {
             ...playlist,
+            last_track_added_at: playlist.last_track_added_at
+              ? new Date(playlist.last_track_added_at)
+              : null,
             tracks: playlist.tracks.map(
               (track): TransformedTrackInPlaylistFullData | TransformedTrackInPlaylist => {
                 let foundTrack: FullTrackResponse | null = null;
